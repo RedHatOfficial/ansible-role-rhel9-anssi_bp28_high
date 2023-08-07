@@ -1,5 +1,6 @@
 ---
 # defaults file for rhel9_anssi_bp28_high
+var_aide_scan_notification_email: root@localhost
 var_authselect_profile: minimal
 var_password_pam_unix_remember: '2'
 var_accounts_passwords_pam_faillock_deny: '3'
@@ -85,6 +86,9 @@ accounts_umask_etc_login_defs: true
 accounts_umask_etc_profile: true
 aide_build_database: true
 aide_periodic_cron_checking: true
+aide_scan_notification: true
+aide_verify_acls: true
+aide_verify_ext_attributes: true
 audit_rules_dac_modification_chmod: true
 audit_rules_dac_modification_chown: true
 audit_rules_dac_modification_fchmod: true
@@ -134,6 +138,7 @@ audit_rules_usergroup_modification_passwd: true
 audit_rules_usergroup_modification_shadow: true
 chronyd_specify_remote_server: true
 configure_strategy: true
+dir_perms_world_writable_root_owned: true
 dir_perms_world_writable_sticky_bits: true
 disable_strategy: true
 enable_authselect: true

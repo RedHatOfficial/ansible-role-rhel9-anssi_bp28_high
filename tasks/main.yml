@@ -23,8 +23,8 @@
   - no_reboot_needed
   - package_aide_installed
 
-- name: Ensure AIDE is installed
-  package:
+- name: Build and Test AIDE Database - Ensure AIDE Is Installed
+  ansible.builtin.package:
     name: '{{ item }}'
     state: present
   with_items:
@@ -50,8 +50,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Build and Test AIDE Database
-  command: /usr/sbin/aide --init
+- name: Build and Test AIDE Database - Build and Test AIDE Database
+  ansible.builtin.command: /usr/sbin/aide --init
   changed_when: true
   when:
   - aide_build_database | bool
@@ -74,8 +74,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Check whether the stock AIDE Database exists
-  stat:
+- name: Build and Test AIDE Database - Check Whether the Stock AIDE Database Exists
+  ansible.builtin.stat:
     path: /var/lib/aide/aide.db.new.gz
   register: aide_database_stat
   when:
@@ -99,8 +99,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Stage AIDE Database
-  copy:
+- name: Build and Test AIDE Database - Stage AIDE Database
+  ansible.builtin.copy:
     src: /var/lib/aide/aide.db.new.gz
     dest: /var/lib/aide/aide.db.gz
     backup: true
@@ -1480,7 +1480,7 @@
   - name: Limit Password Reuse - Check if expected PAM module line is present in {{ pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+requisite\s+pam_pwhistory.so\s*.*
+      regexp: ^\s*password\s+{{ 'requisite' | regex_escape() }}\s+pam_pwhistory.so\s*.*
       state: absent
     check_mode: true
     changed_when: false
@@ -1853,7 +1853,7 @@
   - name: Limit Password Reuse - Check if expected PAM module line is present in {{ pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+requisite\s+pam_pwhistory.so\s*.*
+      regexp: ^\s*password\s+{{ 'requisite' | regex_escape() }}\s+pam_pwhistory.so\s*.*
       state: absent
     check_mode: true
     changed_when: false
@@ -1897,7 +1897,7 @@
   - name: Limit Password Reuse - Check if the required PAM module option is present in {{ pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+requisite\s+pam_pwhistory.so\s*.*\sremember\b
+      regexp: ^\s*password\s+{{ 'requisite' | regex_escape() }}\s+pam_pwhistory.so\s*.*\sremember\b
       state: absent
     check_mode: true
     changed_when: false
@@ -1906,7 +1906,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+requisite\s+pam_pwhistory.so.*)
+      regexp: ^(\s*password\s+{{ 'requisite' | regex_escape() }}\s+pam_pwhistory.so.*)
       line: \1 remember={{ var_password_pam_unix_remember }}
       state: present
     register: result_pam_remember_add
@@ -1917,7 +1917,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+requisite\s+pam_pwhistory.so\s+.*)(remember)=[0-9a-zA-Z]+\s*(.*)
+      regexp: ^(\s*password\s+{{ 'requisite' | regex_escape() }}\s+pam_pwhistory.so\s+.*)(remember)=[0-9a-zA-Z]+\s*(.*)
       line: \1\2={{ var_password_pam_unix_remember }} \3
     register: result_pam_remember_edit
     when:
@@ -4809,7 +4809,7 @@
   - name: Set PAM's Password Hashing Algorithm - Check if expected PAM module line is present in {{ pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*
       state: absent
     check_mode: true
     changed_when: false
@@ -4855,7 +4855,7 @@
   - name: Set PAM's Password Hashing Algorithm - Check if the required PAM module option is present in {{ pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*\ssha512\b
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*\ssha512\b
       state: absent
     check_mode: true
     changed_when: false
@@ -4865,7 +4865,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+sufficient\s+pam_unix.so.*)
+      regexp: ^(\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so.*)
       line: \1 sha512
       state: present
     register: result_pam_sha512_add
@@ -5171,7 +5171,7 @@
       }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*
       state: absent
     check_mode: true
     changed_when: false
@@ -5220,7 +5220,7 @@
       pam_file_path }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*\srounds\b
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*\srounds\b
       state: absent
     check_mode: true
     changed_when: false
@@ -5230,7 +5230,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+sufficient\s+pam_unix.so.*)
+      regexp: ^(\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so.*)
       line: \1 rounds={{ var_password_pam_unix_rounds }}
       state: present
     register: result_pam_rounds_add
@@ -5241,7 +5241,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+sufficient\s+pam_unix.so\s+.*)(rounds)=[0-9a-zA-Z]+\s*(.*)
+      regexp: ^(\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s+.*)(rounds)=[0-9a-zA-Z]+\s*(.*)
       line: \1\2={{ var_password_pam_unix_rounds }} \3
     register: result_pam_rounds_edit
     when:
@@ -5430,7 +5430,7 @@
       }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*
       state: absent
     check_mode: true
     changed_when: false
@@ -5479,7 +5479,7 @@
       }}
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
-      regexp: ^\s*password\s+sufficient\s+pam_unix.so\s*.*\srounds\b
+      regexp: ^\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s*.*\srounds\b
       state: absent
     check_mode: true
     changed_when: false
@@ -5489,7 +5489,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+sufficient\s+pam_unix.so.*)
+      regexp: ^(\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so.*)
       line: \1 rounds={{ var_password_pam_unix_rounds }}
       state: present
     register: result_pam_rounds_add
@@ -5500,7 +5500,7 @@
     ansible.builtin.lineinfile:
       path: '{{ pam_file_path }}'
       backrefs: true
-      regexp: ^(\s*password\s+sufficient\s+pam_unix.so\s+.*)(rounds)=[0-9a-zA-Z]+\s*(.*)
+      regexp: ^(\s*password\s+{{ 'sufficient' | regex_escape() }}\s+pam_unix.so\s+.*)(rounds)=[0-9a-zA-Z]+\s*(.*)
       line: \1\2={{ var_password_pam_unix_rounds }} \3
     register: result_pam_rounds_edit
     when:
@@ -5614,14 +5614,9 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Check if umask in /etc/bashrc is already set
-  ansible.builtin.lineinfile:
-    path: /etc/bashrc
-    regexp: ^(\s*)umask\s+.*
-    state: absent
-  check_mode: true
-  changed_when: false
-  register: umask_replace
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-83644-5
   - NIST-800-53-AC-6(1)
@@ -5641,6 +5636,34 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
+- name: Check if umask in /etc/bashrc is already set
+  ansible.builtin.lineinfile:
+    path: /etc/bashrc
+    regexp: ^(\s*)umask\s+.*
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: umask_replace
+  when:
+  - accounts_umask_etc_bashrc | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"bash" in ansible_facts.packages'
+  tags:
+  - CCE-83644-5
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-8.6.1
+  - accounts_umask_etc_bashrc
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Replace user umask in /etc/bashrc
   ansible.builtin.replace:
     path: /etc/bashrc
@@ -5653,6 +5676,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"bash" in ansible_facts.packages'
   - umask_replace.found > 0
   tags:
   - CCE-83644-5
@@ -5678,6 +5702,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - '"bash" in ansible_facts.packages'
   - umask_replace.found == 0
   tags:
   - CCE-83644-5
@@ -5900,6 +5925,116 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+
+- name: Ensure audit is installed
+  package:
+    name: audit
+    state: present
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_audit_installed | bool
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-83649-4
+  - NIST-800-53-AC-7(a)
+  - NIST-800-53-AU-12(2)
+  - NIST-800-53-AU-14
+  - NIST-800-53-AU-2(a)
+  - NIST-800-53-AU-7(1)
+  - NIST-800-53-AU-7(2)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_audit_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90829-3
+  - CJIS-5.4.1.1
+  - NIST-800-171-3.3.1
+  - NIST-800-171-3.3.2
+  - NIST-800-171-3.3.6
+  - NIST-800-53-AC-2(g)
+  - NIST-800-53-AC-6(9)
+  - NIST-800-53-AU-10
+  - NIST-800-53-AU-12(c)
+  - NIST-800-53-AU-14(1)
+  - NIST-800-53-AU-2(d)
+  - NIST-800-53-AU-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(23)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_auditd_enabled
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_auditd_enabled | bool
+
+- name: Enable service auditd
+  block:
+  - name: Gather the package facts
+    package_facts:
+      manager: auto
+  - name: Enable service auditd
+    systemd:
+      name: auditd
+      enabled: 'yes'
+      state: started
+      masked: 'no'
+    when:
+    - '"audit" in ansible_facts.packages'
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_auditd_enabled | bool
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"audit" in ansible_facts.packages'
+  tags:
+  - CCE-90829-3
+  - CJIS-5.4.1.1
+  - NIST-800-171-3.3.1
+  - NIST-800-171-3.3.2
+  - NIST-800-171-3.3.6
+  - NIST-800-53-AC-2(g)
+  - NIST-800-53-AC-6(9)
+  - NIST-800-53-AU-10
+  - NIST-800-53-AU-12(c)
+  - NIST-800-53-AU-14(1)
+  - NIST-800-53-AU-2(d)
+  - NIST-800-53-AU-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(23)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_auditd_enabled
 
 - name: Gather the package facts
   package_facts:
@@ -8490,6 +8625,78 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
+- name: Check if watch rule for /etc/sudoers already exists in /etc/audit/audit.rules
+  find:
+    paths: /etc/audit/
+    contains: ^\s*-w\s+/etc/sudoers\s+-p\s+wa(\s|$)+
+    patterns: audit.rules
+  register: find_existing_watch_audit_rules
+  when:
+  - audit_rules_sysadmin_actions | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-83729-4
+  - CJIS-5.4.1.1
+  - NIST-800-171-3.1.7
+  - NIST-800-53-AC-2(7)(b)
+  - NIST-800-53-AC-6(9)
+  - NIST-800-53-AU-12(c)
+  - NIST-800-53-AU-2(d)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_rules_sysadmin_actions
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Add watch rule for /etc/sudoers in /etc/audit/audit.rules
+  lineinfile:
+    line: -w /etc/sudoers -p wa -k actions
+    state: present
+    dest: /etc/audit/audit.rules
+    create: true
+    mode: '0640'
+  when:
+  - audit_rules_sysadmin_actions | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_existing_watch_audit_rules.matched is defined and find_existing_watch_audit_rules.matched == 0
+  tags:
+  - CCE-83729-4
+  - CJIS-5.4.1.1
+  - NIST-800-171-3.1.7
+  - NIST-800-53-AC-2(7)(b)
+  - NIST-800-53-AC-6(9)
+  - NIST-800-53-AU-12(c)
+  - NIST-800-53-AU-2(d)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_rules_sysadmin_actions
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Check if watch rule for /etc/sudoers already exists in /etc/audit/rules.d/
   find:
     paths: /etc/audit/rules.d
@@ -8667,10 +8874,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Check if watch rule for /etc/sudoers already exists in /etc/audit/audit.rules
+- name: Check if watch rule for /etc/sudoers.d/ already exists in /etc/audit/audit.rules
   find:
     paths: /etc/audit/
-    contains: ^\s*-w\s+/etc/sudoers\s+-p\s+wa(\s|$)+
+    contains: ^\s*-w\s+/etc/sudoers.d/\s+-p\s+wa(\s|$)+
     patterns: audit.rules
   register: find_existing_watch_audit_rules
   when:
@@ -8702,9 +8909,9 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Add watch rule for /etc/sudoers in /etc/audit/audit.rules
+- name: Add watch rule for /etc/sudoers.d/ in /etc/audit/audit.rules
   lineinfile:
-    line: -w /etc/sudoers -p wa -k actions
+    line: -w /etc/sudoers.d/ -p wa -k actions
     state: present
     dest: /etc/audit/audit.rules
     create: true
@@ -8896,78 +9103,6 @@
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   - find_existing_watch_rules_d.matched is defined and find_existing_watch_rules_d.matched == 0
-  tags:
-  - CCE-83729-4
-  - CJIS-5.4.1.1
-  - NIST-800-171-3.1.7
-  - NIST-800-53-AC-2(7)(b)
-  - NIST-800-53-AC-6(9)
-  - NIST-800-53-AU-12(c)
-  - NIST-800-53-AU-2(d)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-10.2.2
-  - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
-  - audit_rules_sysadmin_actions
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-
-- name: Check if watch rule for /etc/sudoers.d/ already exists in /etc/audit/audit.rules
-  find:
-    paths: /etc/audit/
-    contains: ^\s*-w\s+/etc/sudoers.d/\s+-p\s+wa(\s|$)+
-    patterns: audit.rules
-  register: find_existing_watch_audit_rules
-  when:
-  - audit_rules_sysadmin_actions | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-83729-4
-  - CJIS-5.4.1.1
-  - NIST-800-171-3.1.7
-  - NIST-800-53-AC-2(7)(b)
-  - NIST-800-53-AC-6(9)
-  - NIST-800-53-AU-12(c)
-  - NIST-800-53-AU-2(d)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-10.2.2
-  - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
-  - audit_rules_sysadmin_actions
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-
-- name: Add watch rule for /etc/sudoers.d/ in /etc/audit/audit.rules
-  lineinfile:
-    line: -w /etc/sudoers.d/ -p wa -k actions
-    state: present
-    dest: /etc/audit/audit.rules
-    create: true
-    mode: '0640'
-  when:
-  - audit_rules_sysadmin_actions | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - find_existing_watch_audit_rules.matched is defined and find_existing_watch_audit_rules.matched == 0
   tags:
   - CCE-83729-4
   - CJIS-5.4.1.1
@@ -10307,6 +10442,229 @@
   package_facts:
     manager: auto
   tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+
+- name: Check if watch rule for /var/log/sudo.log already exists in /etc/audit/rules.d/
+  find:
+    paths: /etc/audit/rules.d
+    contains: ^\s*-w\s+/var/log/sudo.log\s+-p\s+wa(\s|$)+
+    patterns: '*.rules'
+  register: find_existing_watch_rules_d
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Search /etc/audit/rules.d for other rules with specified key logins
+  find:
+    paths: /etc/audit/rules.d
+    contains: ^.*(?:-F key=|-k\s+)logins$
+    patterns: '*.rules'
+  register: find_watch_key
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_existing_watch_rules_d.matched is defined and find_existing_watch_rules_d.matched == 0
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Use /etc/audit/rules.d/logins.rules as the recipient for the rule
+  set_fact:
+    all_files:
+    - /etc/audit/rules.d/logins.rules
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_watch_key.matched is defined and find_watch_key.matched == 0 and find_existing_watch_rules_d.matched is defined and
+    find_existing_watch_rules_d.matched == 0
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Use matched file as the recipient for the rule
+  set_fact:
+    all_files:
+    - '{{ find_watch_key.files | map(attribute=''path'') | list | first }}'
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_watch_key.matched is defined and find_watch_key.matched > 0 and find_existing_watch_rules_d.matched is defined and
+    find_existing_watch_rules_d.matched == 0
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Add watch rule for /var/log/sudo.log in /etc/audit/rules.d/
+  lineinfile:
+    path: '{{ all_files[0] }}'
+    line: -w /var/log/sudo.log -p wa -k logins
+    create: true
+    mode: '0640'
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_existing_watch_rules_d.matched is defined and find_existing_watch_rules_d.matched == 0
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Check if watch rule for /var/log/sudo.log already exists in /etc/audit/audit.rules
+  find:
+    paths: /etc/audit/
+    contains: ^\s*-w\s+/var/log/sudo.log\s+-p\s+wa(\s|$)+
+    patterns: audit.rules
+  register: find_existing_watch_audit_rules
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Add watch rule for /var/log/sudo.log in /etc/audit/audit.rules
+  lineinfile:
+    line: -w /var/log/sudo.log -p wa -k logins
+    state: present
+    dest: /etc/audit/audit.rules
+    create: true
+    mode: '0640'
+  when:
+  - audit_sudo_log_events | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - find_existing_watch_audit_rules.matched is defined and find_existing_watch_audit_rules.matched == 0
+  tags:
+  - CCE-86433-0
+  - PCI-DSS-Req-10.2.2
+  - PCI-DSS-Req-10.2.5.b
+  - PCI-DSSv4-10.2.1.5
+  - PCI-DSSv4-10.2.2
+  - audit_sudo_log_events
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
   - CCE-83830-0
   - CJIS-5.4.1.1
   - NIST-800-171-3.1.7
@@ -10341,6 +10699,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -10463,6 +10822,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83830-0
   - CJIS-5.4.1.1
@@ -10583,6 +10943,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83830-0
@@ -10638,6 +10999,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -10762,6 +11124,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83812-8
   - CJIS-5.4.1.1
@@ -10884,6 +11247,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83812-8
@@ -13149,6 +13513,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -13273,6 +13638,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83833-4
   - CJIS-5.4.1.1
@@ -13395,6 +13761,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83833-4
@@ -15734,6 +16101,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -15859,6 +16227,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83754-2
   - NIST-800-171-3.1.7
@@ -15982,6 +16351,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83754-2
@@ -16336,6 +16706,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -16461,6 +16832,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83758-3
   - NIST-800-171-3.1.7
@@ -16584,6 +16956,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83758-3
@@ -16637,6 +17010,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -16762,6 +17136,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83757-5
   - NIST-800-171-3.1.7
@@ -16885,6 +17260,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83757-5
@@ -17241,6 +17617,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -17372,6 +17749,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83786-4
   - NIST-800-171-3.1.7
@@ -17501,6 +17879,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83786-4
@@ -17631,6 +18010,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83786-4
   - NIST-800-171-3.1.7
@@ -17760,6 +18140,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83786-4
@@ -18393,6 +18774,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
     == "s390x" or ansible_architecture == "x86_64"
   tags:
@@ -18524,6 +18906,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83801-1
   - NIST-800-171-3.1.7
@@ -18653,6 +19036,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83801-1
@@ -18783,6 +19167,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   tags:
   - CCE-83801-1
   - NIST-800-171-3.1.7
@@ -18912,6 +19297,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - not ( ansible_architecture == "aarch64" )
   - audit_arch == "b64"
   tags:
   - CCE-83801-1
@@ -20979,10 +21365,10 @@
   - reboot_required | bool
   - restrict_strategy | bool
 
-- name: Check if watch rule for /var/log/faillock already exists in /etc/audit/rules.d/
+- name: Check if watch rule for {{ var_accounts_passwords_pam_faillock_dir }} already exists in /etc/audit/rules.d/
   find:
     paths: /etc/audit/rules.d
-    contains: ^\s*-w\s+/var/log/faillock\s+-p\s+wa(\s|$)+
+    contains: ^\s*-w\s+{{ var_accounts_passwords_pam_faillock_dir }}\s+-p\s+wa(\s|$)+
     patterns: '*.rules'
   register: find_existing_watch_rules_d
   when:
@@ -21104,10 +21490,10 @@
   - reboot_required
   - restrict_strategy
 
-- name: Add watch rule for /var/log/faillock in /etc/audit/rules.d/
+- name: Add watch rule for {{ var_accounts_passwords_pam_faillock_dir }} in /etc/audit/rules.d/
   lineinfile:
     path: '{{ all_files[0] }}'
-    line: -w /var/log/faillock -p wa -k logins
+    line: -w {{ var_accounts_passwords_pam_faillock_dir }} -p wa -k logins
     create: true
     mode: '0640'
   when:
@@ -21136,10 +21522,10 @@
   - reboot_required
   - restrict_strategy
 
-- name: Check if watch rule for /var/log/faillock already exists in /etc/audit/audit.rules
+- name: Check if watch rule for {{ var_accounts_passwords_pam_faillock_dir }} already exists in /etc/audit/audit.rules
   find:
     paths: /etc/audit/
-    contains: ^\s*-w\s+/var/log/faillock\s+-p\s+wa(\s|$)+
+    contains: ^\s*-w\s+{{ var_accounts_passwords_pam_faillock_dir }}\s+-p\s+wa(\s|$)+
     patterns: audit.rules
   register: find_existing_watch_audit_rules
   when:
@@ -21167,9 +21553,9 @@
   - reboot_required
   - restrict_strategy
 
-- name: Add watch rule for /var/log/faillock in /etc/audit/audit.rules
+- name: Add watch rule for {{ var_accounts_passwords_pam_faillock_dir }} in /etc/audit/audit.rules
   lineinfile:
-    line: -w /var/log/faillock -p wa -k logins
+    line: -w {{ var_accounts_passwords_pam_faillock_dir }} -p wa -k logins
     state: present
     dest: /etc/audit/audit.rules
     create: true
@@ -22636,6 +23022,7 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "s390x" ) )
   tags:
   - CCE-83835-9
   - CJIS-5.4.1.1
@@ -24244,6 +24631,51 @@
   - no_reboot_needed
   - rsyslog_files_permissions
 
+- name: Ensure logrotate is installed
+  package:
+    name: logrotate
+    state: present
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_logrotate_installed | bool
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-86155-9
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.7
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_logrotate_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83993-6
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.7
+  - PCI-DSSv4-10.5.1
+  - configure_strategy
+  - ensure_logrotate_activated
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  when:
+  - configure_strategy | bool
+  - ensure_logrotate_activated | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+
 - name: Configure daily log rotation in /etc/logrotate.conf
   lineinfile:
     create: true
@@ -24258,6 +24690,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"logrotate" in ansible_facts.packages'
   tags:
   - CCE-83993-6
   - NIST-800-53-CM-6(a)
@@ -24284,6 +24717,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"logrotate" in ansible_facts.packages'
   tags:
   - CCE-83993-6
   - NIST-800-53-CM-6(a)
@@ -24317,6 +24751,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"logrotate" in ansible_facts.packages'
   tags:
   - CCE-83993-6
   - NIST-800-53-CM-6(a)
@@ -24328,6 +24763,60 @@
   - low_disruption
   - medium_severity
   - no_reboot_needed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86158-3
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.7
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - timer_logrotate_enabled
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - timer_logrotate_enabled | bool
+
+- name: Enable timer logrotate
+  block:
+  - name: Gather the package facts
+    package_facts:
+      manager: auto
+  - name: Enable timer logrotate
+    systemd:
+      name: logrotate.timer
+      enabled: 'yes'
+      state: started
+    when:
+    - '"logrotate" in ansible_facts.packages'
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - timer_logrotate_enabled | bool
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('9', '>=') and "logrotate" in ansible_facts.packages
+    )
+  tags:
+  - CCE-86158-3
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.7
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - timer_logrotate_enabled
 
 - name: Set rsyslog remote loghost
   lineinfile:
@@ -27951,14 +28440,34 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Get all world-writable directories with no sticky bits set
-  shell: 'set -o pipefail
-
-    df --local -P | awk ''{if (NR!=1) print $6}'' | xargs -I ''{}'' find ''{}'' -xdev -type d \( -perm -0002 -a ! -perm -1000
-    \) 2>/dev/null
-
-    '
-  register: dir_output
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Define Excluded (Non-Local) File Systems and Paths
+  ansible.builtin.set_fact:
+    excluded_fstypes:
+    - afs
+    - ceph
+    - cifs
+    - smb3
+    - smbfs
+    - sshfs
+    - ncpfs
+    - ncp
+    - nfs
+    - nfs4
+    - gfs
+    - gfs2
+    - glusterfs
+    - gpfs
+    - pvfs2
+    - ocfs2
+    - lustre
+    - davfs
+    - fuse.sshfs
+    excluded_paths:
+    - dev
+    - proc
+    - run
+    - sys
+    search_paths: []
   tags:
   - CCE-83895-3
   - NIST-800-53-AC-6(1)
@@ -27977,12 +28486,179 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure sticky bit is set
-  file:
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Find Relevant Root Directories Ignoring Pre-Defined
+    Excluded Paths
+  ansible.builtin.find:
+    paths: /
+    file_type: directory
+    excludes: '{{ excluded_paths }}'
+    hidden: true
+    recurse: false
+  register: result_relevant_root_dirs
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Include Relevant Root Directories in a List of Paths
+    to be Searched
+  ansible.builtin.set_fact:
+    search_paths: '{{ search_paths | union([item.path]) }}'
+  loop: '{{ result_relevant_root_dirs.files }}'
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Increment Search Paths List with Local Partitions
+    Mount Points
+  ansible.builtin.set_fact:
+    search_paths: '{{ search_paths | union([item.mount]) }}'
+  loop: '{{ ansible_mounts }}'
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - item.fstype not in excluded_fstypes
+  - item.mount != '/'
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Increment Search Paths List with Local NFS File
+    System Targets
+  ansible.builtin.set_fact:
+    search_paths: '{{ search_paths | union([item.device.split('':'')[1]]) }}'
+  loop: '{{ ansible_mounts }}'
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - item.device is search("localhost:")
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Define Rule Specific Facts
+  ansible.builtin.set_fact:
+    world_writable_dirs: []
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Find All Uncompliant Directories in Local File Systems
+  ansible.builtin.command:
+    cmd: find {{ item }} -xdev -type d ( -perm -0002 -a ! -perm -1000 )
+  loop: '{{ search_paths }}'
+  changed_when: false
+  register: result_found_dirs
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Create List of World Writable Directories Without
+    Sticky Bit
+  ansible.builtin.set_fact:
+    world_writable_dirs: '{{ world_writable_dirs | union(item.stdout_lines) | list }}'
+  loop: '{{ result_found_dirs.results }}'
+  tags:
+  - CCE-83895-3
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - dir_perms_world_writable_sticky_bits
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - dir_perms_world_writable_sticky_bits | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Verify that All World-Writable Directories Have Sticky Bits Set - Ensure Sticky Bit is Set on Local World Writable
+    Directories
+  ansible.builtin.file:
     path: '{{ item }}'
     mode: a+t
-  with_items:
-  - '{{ dir_output.stdout_lines }}'
+  loop: '{{ world_writable_dirs }}'
   tags:
   - CCE-83895-3
   - NIST-800-53-AC-6(1)
@@ -30247,18 +30923,19 @@
   - configure_strategy | bool
   - high_disruption | bool
   - low_complexity | bool
+  - medium_severity | bool
   - mount_option_var_nosuid | bool
   - no_reboot_needed | bool
-  - unknown_severity | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var" in ansible_mounts |
+    map(attribute="mount") | list )
   tags:
   - CCE-83867-2
   - configure_strategy
   - high_disruption
   - low_complexity
+  - medium_severity
   - mount_option_var_nosuid
   - no_reboot_needed
-  - unknown_severity
 
 - name: 'Add nosuid Option to /var: Create mount_info dictionary variable'
   set_fact:
@@ -30270,10 +30947,11 @@
   - configure_strategy | bool
   - high_disruption | bool
   - low_complexity | bool
+  - medium_severity | bool
   - mount_option_var_nosuid | bool
   - no_reboot_needed | bool
-  - unknown_severity | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var" in ansible_mounts |
+    map(attribute="mount") | list )
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
   tags:
@@ -30281,9 +30959,9 @@
   - configure_strategy
   - high_disruption
   - low_complexity
+  - medium_severity
   - mount_option_var_nosuid
   - no_reboot_needed
-  - unknown_severity
 
 - name: 'Add nosuid Option to /var: If /var not mounted, craft mount_info manually'
   set_fact:
@@ -30301,10 +30979,11 @@
   - configure_strategy | bool
   - high_disruption | bool
   - low_complexity | bool
+  - medium_severity | bool
   - mount_option_var_nosuid | bool
   - no_reboot_needed | bool
-  - unknown_severity | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var" in ansible_mounts |
+    map(attribute="mount") | list )
   - ("--fstab" | length == 0)
   - (device_name.stdout | length == 0)
   tags:
@@ -30312,9 +30991,9 @@
   - configure_strategy
   - high_disruption
   - low_complexity
+  - medium_severity
   - mount_option_var_nosuid
   - no_reboot_needed
-  - unknown_severity
 
 - name: 'Add nosuid Option to /var: Make sure nosuid option is part of the to /var options'
   set_fact:
@@ -30323,19 +31002,20 @@
   - configure_strategy | bool
   - high_disruption | bool
   - low_complexity | bool
+  - medium_severity | bool
   - mount_option_var_nosuid | bool
   - no_reboot_needed | bool
-  - unknown_severity | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var" in ansible_mounts |
+    map(attribute="mount") | list )
   - mount_info is defined and "nosuid" not in mount_info.options
   tags:
   - CCE-83867-2
   - configure_strategy
   - high_disruption
   - low_complexity
+  - medium_severity
   - mount_option_var_nosuid
   - no_reboot_needed
-  - unknown_severity
 
 - name: 'Add nosuid Option to /var: Ensure /var is mounted with nosuid option'
   mount:
@@ -30348,19 +31028,20 @@
   - configure_strategy | bool
   - high_disruption | bool
   - low_complexity | bool
+  - medium_severity | bool
   - mount_option_var_nosuid | bool
   - no_reboot_needed | bool
-  - unknown_severity | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var" in ansible_mounts |
+    map(attribute="mount") | list )
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
   tags:
   - CCE-83867-2
   - configure_strategy
   - high_disruption
   - low_complexity
+  - medium_severity
   - mount_option_var_nosuid
   - no_reboot_needed
-  - unknown_severity
 
 - name: 'Add noexec Option to /var/tmp: Check information associated to mountpoint'
   command: findmnt --fstab '/var/tmp'
@@ -31952,7 +32633,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUXTYPE=
       state: absent
     check_mode: true
@@ -31961,7 +32642,7 @@
   - name: Deduplicate values from /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUXTYPE=
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -32000,7 +32681,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUX=
       state: absent
     check_mode: true
@@ -32009,7 +32690,7 @@
   - name: Deduplicate values from /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUX=
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -32054,8 +32735,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_polyinstantiation_enabled | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84083-5
   - enable_strategy
@@ -32077,8 +32758,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_polyinstantiation_enabled | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84083-5
   - enable_strategy
@@ -32098,54 +32779,9 @@
   - low_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - sebool_secure_mode_insmod | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
-  tags:
-  - CCE-84087-6
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - sebool_secure_mode_insmod
-
-- name: Set SELinux boolean secure_mode_insmod accordingly
-  seboolean:
-    name: secure_mode_insmod
-    state: '{{ var_secure_mode_insmod }}'
-    persistent: true
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - sebool_secure_mode_insmod | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
-  tags:
-  - CCE-84087-6
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - sebool_secure_mode_insmod
-
-- name: Ensure python3-libsemanage installed
-  package:
-    name: python3-libsemanage
-    state: present
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
   - sebool_selinuxuser_execheap | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84084-3
   - enable_strategy
@@ -32167,8 +32803,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_selinuxuser_execheap | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84084-3
   - enable_strategy
@@ -32189,8 +32825,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_selinuxuser_execstack | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84089-2
   - enable_strategy
@@ -32212,8 +32848,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_selinuxuser_execstack | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84089-2
   - enable_strategy
@@ -32234,8 +32870,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_ssh_sysadm_login | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84081-9
   - enable_strategy
@@ -32257,8 +32893,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sebool_ssh_sysadm_login | bool
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) )
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - not ( lookup("env", "container") == "bwrap-osbuild" )
   tags:
   - CCE-84081-9
   - enable_strategy
@@ -32921,7 +33557,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/ssh/sshd_config
-      create: false
+      create: true
       regexp: (?i)^\s*ClientAliveCountMax\s+
       state: absent
     check_mode: true
@@ -32930,7 +33566,7 @@
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
-      create: false
+      create: true
       regexp: (?i)^\s*ClientAliveCountMax\s+
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -32941,7 +33577,7 @@
       regexp: (?i)^\s*ClientAliveCountMax\s+
       line: ClientAliveCountMax {{ var_sshd_set_keepalive }}
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -32974,7 +33610,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/ssh/sshd_config
-      create: false
+      create: true
       regexp: (?i)^\s*ClientAliveInterval\s+
       state: absent
     check_mode: true
@@ -32983,7 +33619,7 @@
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
-      create: false
+      create: true
       regexp: (?i)^\s*ClientAliveInterval\s+
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -32994,7 +33630,7 @@
       regexp: (?i)^\s*ClientAliveInterval\s+
       line: ClientAliveInterval {{ sshd_idle_timeout_value }}
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -33060,7 +33696,7 @@
       regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       line: PermitRootLogin no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool

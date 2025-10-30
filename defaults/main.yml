@@ -72,7 +72,6 @@ var_accounts_passwords_pam_faillock_dir: /var/log/faillock
 DISA_STIG_RHEL_09_212025: true
 DISA_STIG_RHEL_09_212030: true
 DISA_STIG_RHEL_09_212040: true
-DISA_STIG_RHEL_09_212045: true
 DISA_STIG_RHEL_09_212050: true
 DISA_STIG_RHEL_09_213010: true
 DISA_STIG_RHEL_09_213015: true
@@ -87,8 +86,6 @@ DISA_STIG_RHEL_09_214015: true
 DISA_STIG_RHEL_09_214020: true
 DISA_STIG_RHEL_09_214025: true
 DISA_STIG_RHEL_09_215020: true
-DISA_STIG_RHEL_09_215030: true
-DISA_STIG_RHEL_09_215035: true
 DISA_STIG_RHEL_09_215040: true
 DISA_STIG_RHEL_09_215060: true
 DISA_STIG_RHEL_09_231050: true
@@ -252,7 +249,9 @@ audit_rules_networkconfig_modification: true
 audit_rules_privileged_commands: true
 audit_rules_privileged_commands_kmod: true
 audit_rules_privileged_commands_sudo: true
-audit_rules_session_events: true
+audit_rules_session_events_btmp: true
+audit_rules_session_events_utmp: true
+audit_rules_session_events_wtmp: true
 audit_rules_sysadmin_actions: true
 audit_rules_time_adjtimex: true
 audit_rules_time_clock_settime: true
@@ -273,6 +272,8 @@ chronyd_specify_remote_server: true
 configure_strategy: true
 dir_perms_world_writable_root_owned: true
 dir_perms_world_writable_sticky_bits: true
+dir_system_commands_group_root_owned: true
+dir_system_commands_root_owned: true
 directory_groupowner_etc_ipsecd: true
 directory_groupowner_etc_iptables: true
 directory_groupowner_etc_nftables: true
@@ -407,8 +408,6 @@ package_chrony_installed: true
 package_dhcp_removed: true
 package_dnf_automatic_installed: true
 package_logrotate_installed: true
-package_rsh_removed: true
-package_rsh_server_removed: true
 package_rsyslog_gnutls_installed: true
 package_sendmail_removed: true
 package_setroubleshoot_plugins_removed: true
@@ -416,15 +415,10 @@ package_setroubleshoot_removed: true
 package_setroubleshoot_server_removed: true
 package_sssd_installed: true
 package_sudo_installed: true
-package_talk_removed: true
-package_talk_server_removed: true
 package_telnet_removed: true
 package_telnet_server_removed: true
 package_tftp_removed: true
 package_tftp_server_removed: true
-package_xinetd_removed: true
-package_ypbind_removed: true
-package_ypserv_removed: true
 postfix_client_configure_mail_alias: true
 postfix_network_listening_disabled: true
 reboot_required: true

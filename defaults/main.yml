@@ -300,8 +300,6 @@ ensure_gpgcheck_local_packages: true
 ensure_gpgcheck_never_disabled: true
 ensure_logrotate_activated: true
 ensure_redhat_gpgkey_installed: true
-file_groupowner_efi_grub2_cfg: true
-file_groupowner_efi_user_cfg: true
 file_groupowner_etc_chrony_keys: true
 file_groupowner_etc_crypttab: true
 file_groupowner_etc_group: true
@@ -320,8 +318,6 @@ file_groupowner_user_cfg: true
 file_groupownership_sshd_private_key: true
 file_groupownership_sshd_pub_key: true
 file_groupownership_system_commands_dirs: true
-file_owner_efi_grub2_cfg: true
-file_owner_efi_user_cfg: true
 file_owner_etc_chrony_keys: true
 file_owner_etc_crypttab: true
 file_owner_etc_group: true
@@ -342,8 +338,6 @@ file_ownership_sshd_private_key: true
 file_ownership_sshd_pub_key: true
 file_permission_user_init_files: true
 file_permissions_binary_dirs: true
-file_permissions_efi_grub2_cfg: true
-file_permissions_efi_user_cfg: true
 file_permissions_etc_chrony_keys: true
 file_permissions_etc_crypttab: true
 file_permissions_etc_group: true
@@ -437,6 +431,7 @@ selinux_state: true
 service_auditd_enabled: true
 service_sssd_enabled: true
 set_password_hashing_algorithm_systemauth: true
+special_service_block: true
 sshd_disable_root_login: true
 sssd_enable_pam_services: true
 sssd_ldap_configure_tls_reqcert: true
